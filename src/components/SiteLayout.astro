@@ -1,0 +1,47 @@
+---
+import "../styles/global.css"
+
+type Props = {
+  readonly canonicalPath?: string
+  readonly description?: string
+  readonly title: string
+}
+
+const {
+  canonicalPath,
+  description = "BlueBada technical notes and migrated Tistory archive.",
+  title,
+} = Astro.props
+const canonicalUrl =
+  canonicalPath === undefined
+    ? undefined
+    : new URL(canonicalPath, Astro.site ?? new URL("https://pontus-jeong.github.io")).toString()
+---
+
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    {canonicalUrl !== undefined && <link rel="canonical" href={canonicalUrl} />}
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <title>{title}</title>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="BlueBada home">BlueBada</a>
+      <nav class="site-nav" aria-label="Primary navigation">
+        <a href="/">Posts</a>
+        <a href="/archive/">Archive</a>
+        <a href="/categories/">Categories</a>
+        <a href="/tags/">Tags</a>
+      </nav>
+    </header>
+    <slot />
+    <footer class="site-footer">
+      <span>BlueBada</span>
+      <span>Tistory archive on GitHub Pages</span>
+    </footer>
+  </body>
+</html>

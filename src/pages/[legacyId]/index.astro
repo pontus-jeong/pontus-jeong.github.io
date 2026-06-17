@@ -1,0 +1,42 @@
+---
+import { getCollection } from "astro:content"
+import SiteLayout from "../../components/SiteLayout.astro"
+import { formattedDate, postHref, sortedVisiblePosts } from "../../lib/blog.ts"
+
+export const getStaticPaths = async () => {
+  const posts = sortedVisiblePosts(await getCollection("tistory"))
+
+  return posts.map((post) => ({
+    params: { legacyId: post.data.id.toString() },
+    props: { post },
+  }))
+}
+
+const { post } = Astro.props
+const canonicalPath = postHref(post)
+---
+
+<SiteLayout
+  title={`${post.data.title} | BlueBada`}
+  description={post.data.description}
+  canonicalPath={canonicalPath}
+>
+  <main class="blog-shell narrow-shell">
+    <section class="legacy-route" aria-labelledby="legacy-title">
+      <p class="eyebrow">Tistory legacy route</p>
+      <h1 id="legacy-title">{post.data.title}</h1>
+      <p class="post-meta">
+        <time datetime={post.data.publishedAt}>{formattedDate(post.data.publishedAt)}</time>
+        <span>{post.data.category}</span>
+      </p>
+      <p class="post-description">
+        This archived numeric URL is preserved for old links. The canonical article is available at
+        its post URL.
+      </p>
+      <a class="latest-link legacy-canonical-link" href={canonicalPath}>
+        <span>Canonical</span>
+        <strong>canonical post</strong>
+      </a>
+    </section>
+  </main>
+</SiteLayout>

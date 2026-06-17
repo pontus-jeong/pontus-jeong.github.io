@@ -1,0 +1,29 @@
+---
+import { getCollection } from "astro:content"
+import SiteLayout from "../../components/SiteLayout.astro"
+import { categorySummaries, sortedVisiblePosts } from "../../lib/blog.ts"
+
+const categories = categorySummaries(sortedVisiblePosts(await getCollection("tistory")))
+---
+
+<SiteLayout title="Categories | BlueBada">
+  <main class="blog-shell narrow-shell">
+    <section class="post-hero">
+      <a class="back-link" href="/">Posts</a>
+      <p class="eyebrow">Categories</p>
+      <h1>Categories</h1>
+    </section>
+    <ul class="taxonomy-index">
+      {
+        categories.map((category) => (
+          <li>
+            <a href={category.href}>
+              <span>{category.label}</span>
+              <strong>{category.count}</strong>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </main>
+</SiteLayout>

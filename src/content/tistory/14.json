@@ -1,0 +1,17 @@
+{
+  "id": 14,
+  "title": "임시)음성 파일 전처리",
+  "slug": "14-post",
+  "description": "kaggle_example_test In [1]: import os from os.path import isdir, join from pathlib import Path import pandas as pd # Math import numpy as np from scipy.fftpack...",
+  "category": "IT 관련",
+  "tags": [],
+  "publishedAt": "2018-01-14T01:17:29+09:00",
+  "sourcePath": "bluebada-1-1/14/14-임시)음성-파일-전처리.html",
+  "legacyPaths": [
+    "/14/"
+  ],
+  "bodyHtml": "",
+  "legacy": true,
+  "draft": false,
+  "legacyArtifactPath": "/legacy/14/index.html"
+}

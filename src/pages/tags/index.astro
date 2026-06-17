@@ -1,0 +1,29 @@
+---
+import { getCollection } from "astro:content"
+import SiteLayout from "../../components/SiteLayout.astro"
+import { sortedVisiblePosts, tagSummaries } from "../../lib/blog.ts"
+
+const tags = tagSummaries(sortedVisiblePosts(await getCollection("tistory")))
+---
+
+<SiteLayout title="Tags | BlueBada">
+  <main class="blog-shell narrow-shell">
+    <section class="post-hero">
+      <a class="back-link" href="/">Posts</a>
+      <p class="eyebrow">Tags</p>
+      <h1>Tags</h1>
+    </section>
+    <ul class="taxonomy-index">
+      {
+        tags.map((tag) => (
+          <li>
+            <a href={tag.href}>
+              <span>{tag.label}</span>
+              <strong>{tag.count}</strong>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </main>
+</SiteLayout>

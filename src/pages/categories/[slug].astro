@@ -1,0 +1,29 @@
+---
+import { getCollection } from "astro:content"
+import PostList from "../../components/PostList.astro"
+import SiteLayout from "../../components/SiteLayout.astro"
+import { categorySummaries, postsForCategory, sortedVisiblePosts } from "../../lib/blog.ts"
+
+export const getStaticPaths = async () => {
+  const posts = sortedVisiblePosts(await getCollection("tistory"))
+
+  return categorySummaries(posts).map((category) => ({
+    params: { slug: category.slug },
+    props: { category, posts: postsForCategory(posts, category.label) },
+  }))
+}
+
+const { category, posts } = Astro.props
+---
+
+<SiteLayout title={`${category.label} | BlueBada`}>
+  <main class="blog-shell narrow-shell">
+    <section class="post-hero">
+      <a class="back-link" href="/categories/">Categories</a>
+      <p class="eyebrow">Category</p>
+      <h1>{category.label}</h1>
+      <p class="post-description">{posts.length} notes in this category.</p>
+    </section>
+    <PostList posts={posts} />
+  </main>
+</SiteLayout>

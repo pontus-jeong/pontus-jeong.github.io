@@ -1,0 +1,98 @@
+---
+import type { CollectionEntry } from "astro:content"
+import { getCollection } from "astro:content"
+import SiteLayout from "../../components/SiteLayout.astro"
+import {
+  adjacentPosts,
+  categoryHref,
+  formattedDate,
+  postHref,
+  sortedVisiblePosts,
+} from "../../lib/blog.ts"
+
+type Props = {
+  readonly post: CollectionEntry<"tistory">
+  readonly posts: readonly CollectionEntry<"tistory">[]
+}
+
+export const getStaticPaths = async () => {
+  const posts = sortedVisiblePosts(await getCollection("tistory"))
+
+  return posts.map((post) => ({
+    params: { slug: post.data.slug },
+    props: { post, posts },
+  }))
+}
+
+const { post, posts } = Astro.props
+const adjacent = adjacentPosts(posts, post.data.slug)
+const legacySrc = post.data.legacy ? post.data.legacyArtifactPath : undefined
+---
+
+<SiteLayout
+  title={`${post.data.title} | BlueBada`}
+  description={post.data.description}
+  canonicalPath={postHref(post)}
+>
+  <main class="blog-shell">
+    <article class="post-page">
+      <header class="post-hero">
+        <a class="back-link" href="/">Posts</a>
+        <p class="post-meta">
+          <time datetime={post.data.publishedAt}>{formattedDate(post.data.publishedAt)}</time>
+          <a href={categoryHref(post.data.category)}>{post.data.category}</a>
+        </p>
+        <h1>{post.data.title}</h1>
+        <p class="post-description">{post.data.description}</p>
+        {
+          post.data.tags.length > 0 && (
+            <ul class="tag-list" aria-label="Tags">
+              {post.data.tags.map((tag) => (
+                <li>{tag}</li>
+              ))}
+            </ul>
+          )
+        }
+      </header>
+
+      {
+        legacySrc !== undefined ? (
+          <section class="legacy-reader" aria-label="Legacy preserved article">
+            <iframe
+              class="legacy-frame"
+              sandbox=""
+              src={legacySrc}
+              title={`${post.data.title} preserved legacy content`}
+            />
+            <a class="legacy-fallback" href={legacySrc}>
+              원문 보존 페이지 열기
+            </a>
+          </section>
+        ) : (
+          <div class="article-body" set:html={post.data.bodyHtml} />
+        )
+      }
+
+      <nav class="post-adjacent" aria-label="Adjacent posts">
+        {
+          adjacent.newer !== undefined ? (
+            <a href={postHref(adjacent.newer)}>
+              <span>Newer</span>
+              <strong>{adjacent.newer.data.title}</strong>
+            </a>
+          ) : (
+            <span />
+          )
+        }
+        {
+          adjacent.older !== undefined && (
+            <a href={postHref(adjacent.older)}>
+              <span>Older</span>
+              <strong>{adjacent.older.data.title}</strong>
+            </a>
+          )
+        }
+      </nav>
+    </article>
+  </main>
+</SiteLayout>

@@ -1,0 +1,59 @@
+---
+import { getCollection } from "astro:content"
+import PostList from "../components/PostList.astro"
+import SiteLayout from "../components/SiteLayout.astro"
+import { categorySummaries, postHref, sortedVisiblePosts } from "../lib/blog.ts"
+
+const posts = sortedVisiblePosts(await getCollection("tistory"))
+const categories = categorySummaries(posts)
+const latestPost = posts[0]
+---
+
+<SiteLayout title="BlueBada | Technical Notes">
+  <main class="blog-shell">
+    <section class="home-intro" aria-labelledby="home-title">
+      <p class="eyebrow">Technical notes</p>
+      <h1 id="home-title">BlueBada</h1>
+      <p class="lead">
+        Flutter, Rails, Swift, and the older Tistory trail, kept as a fast static archive.
+      </p>
+      {
+        latestPost !== undefined && (
+          <a class="latest-link" href={postHref(latestPost)}>
+            <span>Latest</span>
+            <strong>{latestPost.data.title}</strong>
+          </a>
+        )
+      }
+    </section>
+
+    <section class="content-grid" aria-label="Blog content">
+      <div class="post-index">
+        <div class="section-heading">
+          <p class="section-label">Posts</p>
+          <h2>All notes</h2>
+        </div>
+        <PostList posts={posts} />
+      </div>
+
+      <aside class="category-rail" aria-labelledby="category-title">
+        <div class="section-heading">
+          <p class="section-label">Categories</p>
+          <h2 id="category-title">By topic</h2>
+        </div>
+        <ul class="category-list">
+          {
+            categories.map((category) => (
+              <li>
+                <a href={category.href}>
+                  <span>{category.label}</span>
+                  <strong>{category.count}</strong>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </aside>
+    </section>
+  </main>
+</SiteLayout>

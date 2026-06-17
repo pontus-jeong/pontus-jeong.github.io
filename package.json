@@ -1,0 +1,34 @@
+{
+  "name": "pontus-jeong-github-pages-blog",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@11.6.0",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "node -e \"require('node:fs').rmSync('dist',{recursive:true,force:true})\" && astro build",
+    "preview": "astro preview",
+    "check": "astro check && tsc --noEmit && biome check .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "import:tistory": "node --experimental-strip-types scripts/import-tistory.ts",
+    "verify:links": "node scripts/verify-links.mjs",
+    "verify:plan-compliance": "node scripts/verify-plan-compliance.mjs"
+  },
+  "dependencies": {
+    "astro": "6.4.7",
+    "cheerio": "^1.2.0",
+    "fflate": "^0.8.3",
+    "zod": "4.4.3"
+  },
+  "devDependencies": {
+    "@astrojs/check": "0.9.9",
+    "@biomejs/biome": "2.5.0",
+    "@playwright/test": "1.61.0",
+    "@types/node": "24.10.2",
+    "typescript": "5.9.3",
+    "vitest": "4.1.9",
+    "yaml": "2.9.0"
+  }
+}

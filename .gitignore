@@ -1,0 +1,14 @@
+node_modules/
+dist/
+.astro/
+coverage/
+playwright-report/
+test-results/
+.tmp/
+*.log
+
+# Local agent/project execution records, not part of the public site.
+.omo/
+evidence/
+plans/
+AGENTS.md

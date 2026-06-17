@@ -1,0 +1,20 @@
+---
+import { getCollection } from "astro:content"
+import PostList from "../../components/PostList.astro"
+import SiteLayout from "../../components/SiteLayout.astro"
+import { sortedVisiblePosts } from "../../lib/blog.ts"
+
+const posts = sortedVisiblePosts(await getCollection("tistory"))
+---
+
+<SiteLayout title="Archive | BlueBada">
+  <main class="blog-shell narrow-shell">
+    <section class="post-hero">
+      <a class="back-link" href="/">Posts</a>
+      <p class="eyebrow">Archive</p>
+      <h1>Archive</h1>
+      <p class="post-description">{posts.length} notes, newest first.</p>
+    </section>
+    <PostList posts={posts} />
+  </main>
+</SiteLayout>
